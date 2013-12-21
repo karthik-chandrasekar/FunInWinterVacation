@@ -36,67 +36,59 @@ class emulate:
 
     def run(self):
         self.first_phase()
-        self.second_phase()
-        self.third_phase()
-
+        #self.second_phase()
+        #self.third_phase()
+        self.fourth_phase()
+        self.fifth_phase()
 
     def first_phase(self):
-        # Open some site, let's pick a random one, the first that pops in mind:
-        r = self.br.open('http://google.com')
-        html = r.read()
-
-        # Show the source
-        print html
-        # or
-        print self.br.response().read()
-
-        # Show the html title
-        print self.br.title()
-
-        # Show the response headers
-        print r.info()
-        # or
-        print self.br.response().info()
-
-        # Show the available forms
-        for f in self.br.forms():
-            print f
-
-        # Select the first (index zero) form
-        self.br.select_form(nr=0)
-
-        # Let's search
-        self.br.form['q']='weekend codes'
+        
+        #Just submits the credentials and performs authentication. It does not move to any page by its own. We have to direct it to go to a specific url. 
+ 
+        sign_in = self.br.open("")
+        self.br.select_form(name="")
+        self.br[""] = ""
+        self.br[""] = ""
         self.br.submit()
-        print self.br.response().read()
-
-        # Looking at some results in link format
-        for l in self.br.links(url_regex='stockrt'):
-            print l   
 
 
     def second_phase(self):
-        # If the protected site didn't receive the authentication data you would
-        # end up with a 410 error in your face
-        self.br.add_password('http://safe-site.domain', 'username', 'password')
-        self.br.open('http://safe-site.domain')  
-  
+        
+        #Check if the course is available. If yes go ahead, submit and go to third phase. Else keep looping in second phase. 
+        courses_html = self.br.open("")
+        self.br.select_form(name="")
+        #if course count is > 0 go ahead. Else go back to second phase beginning
+        self.br[""] = "CSE"
+        self.br.submit()
 
     def third_phase(self):
-        # Testing presence of link (if the link is not found you would have to
-        # handle a LinkNotFoundError exception)
-        self.br.find_link(text='Weekend codes')
+    
+        # Just press the next button
 
-        # Actually clicking the link
-        req = self.br.click_link(text='Weekend codes')
-        self.br.open(req)
-        print self.br.response().read()
-        print self.br.geturl()
+        add_to_cart = self.br.open("")
+        self.br.select_form(name="")  # next button
+        self.br.submit()
 
-        # Back
-        self.br.back()
-        print self.br.response().read()
-        print self.br.geturl() 
+
+    #Step two and third can be skipped  and directly come to fourth and fifth phase. Please verify if this is okay. 
+
+    def fourth_phase(self):
+               
+        #Just proceed to step 2 of 3
+
+        self.br.open("")
+        self.br.select_form(name="") #Pressing proceed to step 2 of 3
+        self.br.submit()
+
+    def fifth_phase(self):
+        
+        #Just finish enrolling
+
+        self.br.open("")
+        self.br_select_form(name="") #Finish enrolling
+        self.br.submit()
+
+
 
 if __name__ == "__main__":
     e_obj = emulate()

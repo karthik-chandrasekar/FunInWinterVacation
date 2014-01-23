@@ -46,26 +46,22 @@ public class Solution {
                 
         }
 
-
-        while(slowPtr.next.val != -999)
-        {
-            slowPtr.val = -999;
-            slowPtr = slowPtr.next;
-        }        
-
         slowPtr = head;
-        
-        while(slowPtr.next.val != -999)
+        fastPtr.val = -999;
+        while(slowPtr != fastPtr)
         {
             slowPtr = slowPtr.next;
+            slowPtr.val = -999; 
         }
 
-        while(fastPtr.next != slowPtr.next)
+        while(true)
+        {
+            if(fastPtr.next.val == -999)
+                break;
             fastPtr = fastPtr.next;
-
-        return fastPtr;
-
-        
+        }
+        return fastPtr.next;
     }
 }
+
 
